@@ -18,32 +18,38 @@ public class APITest {
   @Test
   public void deveRetornarTarefas() {
     RestAssured.given()
+	  .log().all()
       .when()
         .get("/todo")
       .then()
-        .statusCode(200);
+        .statusCode(200)
+		.log().all();
   }
   
   @Test
   public void deveSalvarTarefa() {
     RestAssured.given()
+	  .log().all()	
       .when()
         .body("{\"task\" : \"Comprar novos cursos\", \"dueDate\" : \"2022-02-27\"}")
         .contentType(ContentType.JSON)
         .post("/todo")
       .then()
-        .statusCode(201);
+        .statusCode(201)
+		.log().all();
   }
   
   @Test
   public void naoDeveSalvarTarefaInvalida() {
     RestAssured.given()
+	  .log().all()
       .when()
         .body("{\"task\" : \"Comprar novos cursos\", \"dueDate\" : \"2010-02-27\"}")
         .contentType(ContentType.JSON)
         .post("/todo")
       .then()
         .statusCode(400)
-        .body("error", CoreMatchers.is("Bad Request"));
+        .body("error", CoreMatchers.is("Bad Request"))
+		.log().all();
   }
 }
