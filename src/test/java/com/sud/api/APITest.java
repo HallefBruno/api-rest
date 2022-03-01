@@ -3,6 +3,7 @@ package com.sud.api;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.time.LocalDate;
 import org.hamcrest.CoreMatchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,31 +19,31 @@ public class APITest {
   @Test
   public void deveRetornarTarefas() {
     RestAssured.given()
-	  .log().all()
+      .log().all()
       .when()
         .get("/todo")
       .then()
         .statusCode(200)
-		.log().all();
+          .log().all();
   }
   
   @Test
   public void deveSalvarTarefa() {
     RestAssured.given()
-	  .log().all()	
+      .log().all()	
       .when()
-        .body("{\"task\" : \"Comprar novos cursos\", \"dueDate\" : \"2022-02-27\"}")
+        .body("{\"task\" : \"Comprar novos cursos\", \"dueDate\" : \""+ LocalDate.now() +"\"}")
         .contentType(ContentType.JSON)
         .post("/todo")
       .then()
         .statusCode(201)
-		.log().all();
+          .log().all();
   }
   
   @Test
   public void naoDeveSalvarTarefaInvalida() {
     RestAssured.given()
-	  .log().all()
+      .log().all()
       .when()
         .body("{\"task\" : \"Comprar novos cursos\", \"dueDate\" : \"2010-02-27\"}")
         .contentType(ContentType.JSON)
@@ -50,6 +51,6 @@ public class APITest {
       .then()
         .statusCode(400)
         .body("error", CoreMatchers.is("Bad Request"))
-		.log().all();
+          .log().all();
   }
 }
